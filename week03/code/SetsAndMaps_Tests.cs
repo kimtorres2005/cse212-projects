@@ -314,5 +314,6 @@ public class EarthquakeDailySummaryTests
         {
             Assert.IsTrue(s.Contains(" - Mag "), "String must contain a magnitude");
         }
+        
     }
 }

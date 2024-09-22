@@ -21,10 +21,22 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
-    }
+        var wordSet = new HashSet<string>(words);
+        var result = new List<string>();
 
+        foreach (var word in words)
+        {
+            var reversedWord = new string(word.Reverse().ToArray());
+            if (wordSet.Contains(reversedWord) && word != reversedWord)
+            {
+                result.Add($"{word} & {reversedWord}");
+                wordSet.Remove(word);  // Remove to avoid duplicates in result
+                wordSet.Remove(reversedWord); // Remove the pair too
+            }
+        }
+
+        return result.ToArray();
+    }
     /// <summary>
     /// Read a census file and summarize the degrees (education)
     /// earned by those contained in the file.  The summary
@@ -39,15 +51,29 @@ public static class SetsAndMaps
     public static Dictionary<string, int> SummarizeDegrees(string filename)
     {
         var degrees = new Dictionary<string, int>();
+
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            if (fields.Length > 3)
+            {
+                var degree = fields[3].Trim();
+                if (!string.IsNullOrEmpty(degree))
+                {
+                    if (degrees.ContainsKey(degree))
+                    {
+                        degrees[degree]++;
+                    }
+                    else
+                    {
+                        degrees[degree] = 1;
+                    }
+                }
+            }
         }
 
         return degrees;
     }
-
     /// <summary>
     /// Determine if 'word1' and 'word2' are anagrams.  An anagram
     /// is when the same letters in a word are re-organized into a 
@@ -66,10 +92,30 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
-    }
+        var cleanWord1 = word1.Replace(" ", "").ToLower();
+        var cleanWord2 = word2.Replace(" ", "").ToLower();
 
+        if (cleanWord1.Length != cleanWord2.Length) return false;
+
+        var charCount = new Dictionary<char, int>();
+
+        foreach (var ch in cleanWord1)
+        {
+            if (charCount.ContainsKey(ch))
+                charCount[ch]++;
+            else
+                charCount[ch] = 1;
+        }
+
+        foreach (var ch in cleanWord2)
+        {
+            if (!charCount.ContainsKey(ch) || charCount[ch] == 0)
+                return false;
+            charCount[ch]--;
+        }
+
+        return true;
+    }
     /// <summary>
     /// This function will read JSON (Javascript Object Notation) data from the 
     /// United States Geological Service (USGS) consisting of earthquake data.
@@ -101,6 +147,19 @@ public static class SetsAndMaps
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
         // 3. Return an array of these string descriptions.
-        return [];
+        if (featureCollection == null || featureCollection.Features == null)
+        {
+            Console.WriteLine("Deserialization failed or features are null.");
+            return Array.Empty<string>();
+        }
+
+        var validFeatures = featureCollection.Features
+            .Where(f => f.Properties != null &&
+                        !string.IsNullOrWhiteSpace(f.Properties.Place) &&
+                        f.Properties.Mag > 0) // Only include magnitudes greater than 0
+            .Select(f => $"{f.Properties.Place} (Magnitude: {f.Properties.Mag})")
+            .ToArray();
+
+        return validFeatures;
     }
 }

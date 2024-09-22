@@ -32,7 +32,25 @@ public class Maze
     /// </summary>
     public void MoveLeft()
     {
-        // FILL IN CODE
+        int newX = _currX - 1;
+        int newY = _currY;
+
+        if (_mazeMap.TryGetValue((_currX, _currY), out bool[] directions))
+        {
+            if (directions[0]) // Left
+            {
+                _currX = newX;
+                Console.WriteLine($"Left to {_currX}, {_currY}");
+            }
+            else
+            {
+                throw new InvalidOperationException("Can't go that way!");
+            }
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -41,7 +59,25 @@ public class Maze
     /// </summary>
     public void MoveRight()
     {
-        // FILL IN CODE
+        int newX = _currX + 1;
+        int newY = _currY;
+
+        if (_mazeMap.TryGetValue((_currX, _currY), out bool[] directions))
+        {
+            if (directions[1]) // Right
+            {
+                _currX = newX;
+                Console.WriteLine($"Right to {_currX}, {_currY}");
+            }
+            else
+            {
+                throw new InvalidOperationException("Can't go that way!");
+            }
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -50,7 +86,25 @@ public class Maze
     /// </summary>
     public void MoveUp()
     {
-        // FILL IN CODE
+        int newX = _currX;
+        int newY = _currY - 1;
+
+        if (_mazeMap.TryGetValue((_currX, _currY), out bool[] directions))
+        {
+            if (directions[2]) // Up
+            {
+                _currY = newY;
+                Console.WriteLine($"Up to {_currX}, {_currY}");
+            }
+            else
+            {
+                throw new InvalidOperationException("Can't go that way!");
+            }
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -59,7 +113,25 @@ public class Maze
     /// </summary>
     public void MoveDown()
     {
-        // FILL IN CODE
+        int newX = _currX;
+        int newY = _currY + 1;
+
+        if (_mazeMap.TryGetValue((_currX, _currY), out bool[] directions))
+        {
+            if (directions[3]) // Down
+            {
+                _currY = newY;
+                Console.WriteLine($"Down to {_currX}, {_currY}");
+            }
+            else
+            {
+                throw new InvalidOperationException("Can't go that way!");
+            }
+        }
+        else
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     public string GetStatus()
