@@ -9,9 +9,9 @@
 /// </summary>
 public class TakingTurnsQueue
 {
-    private readonly PersonQueue _people = new();
+    private readonly Queue<Person> _people = new();
 
-    public int Length => _people.Length;
+    public int Length => _people.Count;
 
     /// <summary>
     /// Add new people to the queue with a name and number of turns
@@ -20,8 +20,7 @@ public class TakingTurnsQueue
     /// <param name="turns">Number of turns remaining</param>
     public void AddPerson(string name, int turns)
     {
-        var person = new Person(name, turns);
-        _people.Enqueue(person);
+        _people.Enqueue(new Person(name, turns)); // Enqueue the person with their turns
     }
 
     /// <summary>
@@ -33,25 +32,31 @@ public class TakingTurnsQueue
     /// </summary>
     public Person GetNextPerson()
     {
-        if (_people.IsEmpty())
+        // Check if the queue is empty
+        if (_people.Count == 0)
         {
             throw new InvalidOperationException("No one in the queue.");
         }
-        else
-        {
-            Person person = _people.Dequeue();
-            if (person.Turns > 1)
-            {
-                person.Turns -= 1;
-                _people.Enqueue(person);
-            }
 
-            return person;
+        var person = _people.Dequeue(); // Dequeue the first person from the queue
+
+        // Check if the person has turns left or infinite turns
+        if (person.Turns > 1)
+        {
+            person.Turns--; // Decrement turns
+            _people.Enqueue(person); // Re-enqueue the person back into the queue
         }
+        else if (person.Turns <= 0)
+        {
+            // Infinite turns, re-enqueue without modifying turns
+            _people.Enqueue(person);
+        }
+
+        return person; // Return the dequeued person
     }
 
     public override string ToString()
     {
-        return _people.ToString();
+        return string.Join(", ", _people.Select(p => p.Name)); // Join names of all people in the queue into a single string
     }
 }

@@ -6,23 +6,45 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 public class PriorityQueueTests
 {
     [TestMethod]
-    // Scenario: 
-    // Expected Result: 
-    // Defect(s) Found: 
+    // Scenario: Enqueue two items with different priorities, dequeue one item.
+    // Expected Result: The item with the highest priority should be dequeued.
+    // Defect(s) Found: The dequeue operation did not remove the item with the highest priority.
     public void TestPriorityQueue_1()
     {
         var priorityQueue = new PriorityQueue();
-        Assert.Fail("Implement the test case and then remove this.");
+        priorityQueue.Enqueue("Item 1", 2);
+        priorityQueue.Enqueue("Item 2", 1);
+        
+        var dequeuedItem = priorityQueue.Dequeue();
+
+        Assert.AreEqual("Item 1", dequeuedItem); // Item 1 has the higher priority
     }
 
     [TestMethod]
-    // Scenario: 
-    // Expected Result: 
-    // Defect(s) Found: 
+    // Scenario: Enqueue three items with the same highest priority, dequeue one item.
+    // Expected Result: The item added first among those with the highest priority should be dequeued.
+    // Defect(s) Found: The dequeue operation did not remove the first item added with the highest priority.
     public void TestPriorityQueue_2()
     {
         var priorityQueue = new PriorityQueue();
-        Assert.Fail("Implement the test case and then remove this.");
+        priorityQueue.Enqueue("Item 3", 3);
+        priorityQueue.Enqueue("Item 4", 3);
+        priorityQueue.Enqueue("Item 5", 3);
+        
+        var dequeuedItem = priorityQueue.Dequeue();
+
+        Assert.AreEqual("Item 3", dequeuedItem); // Item 3 should be dequeued first
+    }
+
+    [TestMethod]
+    // Scenario: Dequeue an item from an empty queue.
+    // Expected Result: An InvalidOperationException should be thrown.
+    // Defect(s) Found: Dequeue operation unexpectedly succeeded on an empty queue.
+    public void TestPriorityQueue_3()
+    {
+        var priorityQueue = new PriorityQueue();
+
+        Assert.ThrowsException<InvalidOperationException>(() => priorityQueue.Dequeue());
     }
 
     // Add more test cases as needed below.
