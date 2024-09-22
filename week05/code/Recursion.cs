@@ -118,7 +118,7 @@ public static class Recursion
 
         // Solve using recursion
         decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
-        remember[s] = ways; // Store the result in the memoization dictionary for future use
+        remember[s] = ways;
         return ways;
     }
 
@@ -139,7 +139,7 @@ public static class Recursion
     {
         if (!pattern.Contains('*'))
         {
-            results.Add(pattern); // Add to results instead of printing
+            results.Add(pattern);
             return;
         }
 
